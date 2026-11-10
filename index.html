@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>신준수 · Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0A0A12;
+      --surface: #111120;
+      --surface-raised: #1A1A2E;
+      --accent: #7B6CF7;
+      --accent-light: rgba(123, 108, 247, 0.12);
+      --accent-border: rgba(123, 108, 247, 0.22);
+      --teal: #3ECFB2;
+      --teal-light: rgba(62, 207, 178, 0.1);
+      --teal-border: rgba(62, 207, 178, 0.25);
+      --text: #E4E4F0;
+      --text-muted: #72728A;
+      --max-w: 1080px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s, border-color 0.3s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(10, 10, 18, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-color: rgba(255,255,255,0.06);
+    }
+    .nav-logo {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo em { color: var(--accent); font-style: normal; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 48px 80px;
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(123, 108, 247, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(123, 108, 247, 0.055) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 20% 50%, black 30%, transparent 80%);
+      mask-image: radial-gradient(ellipse 90% 70% at 20% 50%, black 30%, transparent 80%);
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(123,108,247,0.14) 0%, transparent 70%);
+      left: -100px; top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: var(--max-w);
+      margin: 0 auto; width: 100%;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent-border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fade-up 0.5s 0.1s ease forwards;
+    }
+    .hero-pill::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+    .hero-name {
+      font-size: clamp(52px, 9vw, 96px);
+      font-weight: 900;
+      letter-spacing: -0.045em;
+      line-height: 1.0;
+      opacity: 0;
+      animation: fade-up 0.6s 0.2s ease forwards;
+    }
+    .hero-name-en {
+      display: block;
+      font-size: clamp(14px, 2vw, 22px);
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+    .hero-desc {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.9;
+      margin-top: 28px;
+      margin-bottom: 44px;
+      font-weight: 300;
+      opacity: 0;
+      animation: fade-up 0.6s 0.32s ease forwards;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fade-up 0.6s 0.42s ease forwards;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+    }
+    .btn-ghost:hover { border-color: var(--accent-border); }
+    .scroll-line {
+      position: absolute;
+      bottom: 44px; left: 48px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      opacity: 0;
+      animation: fade-up 0.6s 0.6s ease forwards;
+    }
+    .scroll-line::before {
+      content: '';
+      display: block;
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: line-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes line-pulse {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 0.9; }
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-pill, .hero-name, .hero-desc, .hero-cta, .scroll-line { animation: none; opacity: 1; }
+      .scroll-line::before { animation: none; }
+    }
+
+    /* ─── STATS STRIP ─── */
+    .stats-wrap {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: var(--surface);
+    }
+    .stats-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 36px 48px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .stat {
+      padding: 0 32px;
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+    .stat:first-child { padding-left: 0; }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      display: block;
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-num em {
+      font-size: 18px;
+      font-weight: 400;
+      font-style: normal;
+      color: var(--accent);
+      margin-left: 2px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* ─── SECTIONS ─── */
+    .section {
+      padding: 96px 48px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .section-full { padding: 80px 48px; }
+    .section-full-inner { max-width: var(--max-w); margin: 0 auto; }
+    .section-heading {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .section-heading::before {
+      content: '';
+      display: block;
+      width: 3px; height: 28px;
+      background: var(--accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 72px;
+      align-items: start;
+    }
+    .about-text p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.95;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { color: var(--text); font-weight: 500; }
+    .info-list { display: flex; flex-direction: column; gap: 10px; }
+    .info-item {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 18px 22px;
+    }
+    .info-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+    .info-value { font-size: 14px; color: var(--text); font-weight: 400; line-height: 1.6; }
+
+    /* ─── TECH ─── */
+    .tech-wrap {
+      background: var(--bg);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+    .tech-cat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--teal);
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pill {
+      background: var(--surface-raised);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-stack { display: flex; flex-direction: column; gap: 20px; }
+
+    .proj-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .proj-tab {
+      padding: 9px 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .proj-tab.active {
+      background: var(--accent-light);
+      border-color: var(--accent-border);
+      color: var(--accent);
+    }
+    .proj-tab:hover:not(.active) {
+      border-color: rgba(255,255,255,0.2);
+      color: var(--text);
+    }
+    .proj-panel { display: none; }
+    .proj-panel.active { display: block; }
+
+    .project-featured {
+      background: var(--surface);
+      border: 1px solid var(--accent-border);
+      border-radius: 20px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .proj-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .proj-badge {
+      display: inline-block;
+      background: var(--accent-light);
+      border: 1px solid var(--accent-border);
+      border-radius: 100px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .proj-period {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .proj-period span {
+      display: inline-block;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      margin: 0 6px;
+      vertical-align: middle;
+    }
+    .proj-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+    .proj-role { font-size: 14px; color: var(--teal); font-weight: 500; margin-bottom: 20px; }
+    .proj-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.9;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+    .proj-features {
+      list-style: none;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .proj-features li {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 300;
+      padding-left: 16px;
+      position: relative;
+    }
+    .proj-features li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 10px;
+      width: 5px; height: 1px;
+      background: var(--accent);
+    }
+    .proj-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .proj-tag {
+      background: var(--teal-light);
+      border: 1px solid var(--teal-border);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--teal);
+      font-weight: 500;
+    }
+    .proj-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .proj-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* System diagram visual */
+    .proj-visual {
+      background: var(--surface-raised);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.05);
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 32px;
+    }
+    .sys-component {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      width: 100%;
+    }
+    .sys-emoji { font-size: 28px; }
+    .sys-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .sys-tech { font-size: 11px; color: var(--text-muted); font-weight: 300; }
+    .sys-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 10px 0;
+    }
+    .sys-arrow-line {
+      width: 1px; height: 18px;
+      background: linear-gradient(to bottom, var(--accent-border), transparent);
+    }
+    .sys-arrow-label {
+      font-size: 10px;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    .sys-arrow-line2 {
+      width: 1px; height: 18px;
+      background: linear-gradient(to bottom, transparent, var(--accent-border));
+    }
+
+    /* Future project card */
+    .project-future {
+      border: 1.5px dashed rgba(123, 108, 247, 0.22);
+      border-radius: 20px;
+      padding: 36px 48px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .future-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .future-text h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .future-text p { font-size: 13px; color: var(--text-muted); font-weight: 300; }
+
+    /* ─── CONTACT ─── */
+    .contact-wrap {
+      background: var(--surface);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .contact-layout {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 48px;
+    }
+    .contact-left h2 {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+    .contact-left p {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 360px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 12px; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 16px 22px;
+      transition: border-color 0.2s, color 0.2s;
+      min-width: 280px;
+    }
+    .contact-link:hover { border-color: var(--accent-border); color: var(--accent); }
+    .contact-icon {
+      width: 36px; height: 36px;
+      background: var(--surface-raised);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .contact-link-label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-bottom: 2px;
+    }
+    .contact-link-value { font-size: 13px; font-weight: 500; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 28px 48px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 860px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 24px 80px; }
+      .scroll-line { left: 24px; }
+      .section { padding: 72px 24px; }
+      .section-full { padding: 64px 24px; }
+      .stats-inner { grid-template-columns: 1fr 1fr; padding: 28px 24px; gap: 20px; }
+      .stat { border-right: none; padding: 0; border-bottom: 1px solid rgba(255,255,255,0.07); padding-bottom: 16px; }
+      .stat:nth-child(3), .stat:last-child { border-bottom: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .tech-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .project-featured { grid-template-columns: 1fr; padding: 32px 28px; gap: 32px; }
+      .proj-visual { display: none; }
+      .project-future { padding: 28px; }
+      .contact-layout { flex-direction: column; align-items: flex-start; }
+      .contact-link { min-width: unset; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="main-nav">
+  <a href="#hero" class="nav-logo">신준수<em>.</em></a>
+  <ul class="nav-links">
+    <li><a href="#about">소개</a></li>
+    <li><a href="#stack">기술 스택</a></li>
+    <li><a href="#projects">프로젝트</a></li>
+    <li><a href="#contact">연락</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-pill">동양미래대학교 컴퓨터소프트웨어공학과</div>
+    <h1 class="hero-name">
+      신준수
+      <span class="hero-name-en">JUNSOO SHIN</span>
+    </h1>
+    <p class="hero-desc">
+      <strong>Flutter 앱</strong>부터 <strong>FastAPI 백엔드</strong>,<br>
+      <strong>Raspberry Pi AI</strong>까지 —<br>
+      아이디어를 실제로 구현합니다.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">프로젝트 보기</a>
+      <a href="#contact" class="btn btn-ghost">연락하기</a>
+    </div>
+  </div>
+  <div class="scroll-line" aria-hidden="true">스크롤</div>
+</section>
+
+<!-- Stats Strip -->
+<div class="stats-wrap">
+  <div class="stats-inner">
+    <div class="stat">
+      <span class="stat-num">8<em>개월</em></span>
+      <span class="stat-label">졸업작품 개발 기간</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3<em>인</em></span>
+      <span class="stat-label">팀 협업 (졸업작품)</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3</span>
+      <span class="stat-label">레이어 풀스택<br>모바일 · 백엔드 · 임베디드</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">10<em>+</em></span>
+      <span class="stat-label">사용 기술 스택</span>
+    </div>
+  </div>
+</div>
+
+<!-- About -->
+<section class="section" id="about">
+  <h2 class="section-heading">소개</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        AI, 모바일, 백엔드를 넘나들며 직접 아이디어를 구현하는 개발자입니다.
+        졸업작품으로 <strong>AI 기반 스마트홈 디지털 액자 시스템 Persona Frame</strong>을
+        팀과 함께 개발했고, Flutter 모바일 앱 전체를 담당했습니다.
+      </p>
+      <p>
+        UI 구현뿐 아니라 <strong>백엔드 연동, 다크·라이트 모드, AI 이름 설정 전파</strong>까지
+        앱의 핵심 기능을 직접 설계하고 완성했습니다.
+        모바일 앱이 Raspberry Pi 디스플레이와 실시간으로 연동되는 구조도 직접 구현했습니다.
+      </p>
+    </div>
+    <div class="info-list">
+      <div class="info-item">
+        <div class="info-label">학교</div>
+        <div class="info-value">동양미래대학교 컴퓨터소프트웨어공학과 3학년</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">관심 분야</div>
+        <div class="info-value">AI Integration · Mobile App Dev<br>Backend Engineering</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Stack -->
+<div class="tech-wrap" id="stack">
+  <div class="section-full">
+    <div class="section-full-inner">
+      <h2 class="section-heading">기술 스택</h2>
+      <div class="tech-grid">
+        <div>
+          <div class="tech-cat-label">Languages</div>
+          <div class="pills">
+            <span class="pill">Dart</span>
+            <span class="pill">Python</span>
+            <span class="pill">JavaScript</span>
+          </div>
+        </div>
+        <div>
+          <div class="tech-cat-label">Frameworks</div>
+          <div class="pills">
+            <span class="pill">Flutter</span>
+            <span class="pill">FastAPI</span>
+            <span class="pill">React</span>
+          </div>
+        </div>
+        <div>
+          <div class="tech-cat-label">Database · Cloud</div>
+          <div class="pills">
+            <span class="pill">PostgreSQL</span>
+            <span class="pill">AWS</span>
+            <span class="pill">Vercel</span>
+          </div>
+        </div>
+        <div>
+          <div class="tech-cat-label">Tools · Hardware</div>
+          <div class="pills">
+            <span class="pill">Git</span>
+            <span class="pill">Android Studio</span>
+            <span class="pill">VS Code</span>
+            <span class="pill">Raspberry Pi</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Projects -->
+<section class="section" id="projects">
+  <h2 class="section-heading">프로젝트</h2>
+  <div class="proj-tabs">
+    <button class="proj-tab active" data-target="proj-persona">Persona Frame</button>
+    <button class="proj-tab" data-target="proj-future">개인 프로젝트</button>
+  </div>
+
+  <div class="proj-panels">
+    <div id="proj-persona" class="proj-panel active">
+    <div class="project-featured">
+      <div class="project-info">
+        <div class="proj-meta">
+          <span class="proj-badge">졸업작품</span>
+          <span class="proj-period">2026.03 – 2026.11<span></span>팀 3인</span>
+        </div>
+        <h3 class="proj-title">Persona Frame</h3>
+        <div class="proj-role">Purby · Flutter 모바일 앱 개발 담당</div>
+        <p class="proj-desc">
+          AI 기반 개인화 스마트홈 시스템. Flutter 모바일 앱이 FastAPI 백엔드를 통해
+          Raspberry Pi 디지털 액자와 실시간으로 연동됩니다.
+          앱에서 설정한 AI 이름, 일정, 테마가 디스플레이에 즉시 반영됩니다.
+        </p>
+        <ul class="proj-features">
+          <li>홈 / 일정 / 설정 / 매뉴얼 4탭 UI 전체 구현</li>
+          <li>다크·라이트 모드, AI 이름 설정 및 앱 전체 전파</li>
+          <li>일정 추가·삭제·완료 기능 및 FastAPI 백엔드 연동</li>
+          <li>Raspberry Pi 디스플레이와 실시간 상태 동기화</li>
+          <li>iOS 미니멀 스타일 디자인 적용 (#F2F4F7 / #6B5CE7)</li>
+        </ul>
+        <div class="proj-tags">
+          <span class="proj-tag">Flutter</span>
+          <span class="proj-tag">Dart</span>
+          <span class="proj-tag">FastAPI</span>
+          <span class="proj-tag">PostgreSQL</span>
+          <span class="proj-tag">Raspberry Pi</span>
+          <span class="proj-tag">Python</span>
+        </div>
+        <a href="https://github.com/ai-purby/purby-backend" class="proj-link" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub 레포 보기
+        </a>
+      </div>
+
+      <!-- System diagram -->
+      <div class="proj-visual" aria-hidden="true">
+        <div class="sys-component">
+          <div class="sys-emoji">📱</div>
+          <div>
+            <div class="sys-name">Flutter 앱 (내 담당)</div>
+            <div class="sys-tech">Dart · Flutter · iOS 스타일 UI</div>
+          </div>
+        </div>
+        <div class="sys-arrow">
+          <div class="sys-arrow-line"></div>
+          <div class="sys-arrow-label">FastAPI · REST</div>
+          <div class="sys-arrow-line2"></div>
+        </div>
+        <div class="sys-component">
+          <div class="sys-emoji">🖥️</div>
+          <div>
+            <div class="sys-name">백엔드 서버</div>
+            <div class="sys-tech">FastAPI · PostgreSQL · AWS</div>
+          </div>
+        </div>
+        <div class="sys-arrow">
+          <div class="sys-arrow-line"></div>
+          <div class="sys-arrow-label">WebSocket · Python</div>
+          <div class="sys-arrow-line2"></div>
+        </div>
+        <div class="sys-component">
+          <div class="sys-emoji">🤖</div>
+          <div>
+            <div class="sys-name">Raspberry Pi 디스플레이</div>
+            <div class="sys-tech">Python · AI 음성 비서</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /proj-persona -->
+
+    <div id="proj-future" class="proj-panel">
+      <div class="project-future">
+        <div class="future-icon">+</div>
+        <div class="future-text">
+          <h4>개인 프로젝트 추가 예정</h4>
+          <p>백엔드 · 모바일 · 웹 개발 프로젝트를 준비 중입니다.</p>
+        </div>
+      </div>
+    </div><!-- /proj-future -->
+  </div><!-- /proj-panels -->
+</section>
+
+<!-- Contact -->
+<div class="contact-wrap" id="contact">
+  <div class="section-full">
+    <div class="section-full-inner">
+      <div class="contact-layout">
+        <div class="contact-left">
+          <h2>함께<br>만들어요</h2>
+          <p>프로젝트 협업이나 채용 관련 문의는 언제든지 연락주세요.</p>
+        </div>
+        <div class="contact-links">
+          <a href="mailto:sin629370@gmail.com" class="contact-link">
+            <div class="contact-icon" aria-hidden="true">✉️</div>
+            <div>
+              <span class="contact-link-label">이메일</span>
+              <span class="contact-link-value">sin629370@gmail.com</span>
+            </div>
+          </a>
+          <a href="https://github.com/elizabeth030310" class="contact-link" target="_blank" rel="noopener">
+            <div class="contact-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </div>
+            <div>
+              <span class="contact-link-label">GitHub</span>
+              <span class="contact-link-value">elizabeth030310</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 신준수
+</footer>
+
+<script>
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  document.querySelectorAll('.proj-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.proj-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.proj-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.target).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
