@@ -227,7 +227,7 @@
       margin: 0 auto;
       padding: 36px 48px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 0;
     }
     .stat {
@@ -414,6 +414,46 @@
       margin: 0 6px;
       vertical-align: middle;
     }
+
+    /* ─── PROJ MINI STATS ─── */
+    .proj-mini-stats {
+      display: flex;
+      gap: 28px;
+      margin-bottom: 20px;
+      padding: 16px 20px;
+      background: var(--surface-raised);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+    }
+    .proj-mini-stat {
+      display: flex;
+      flex-direction: column;
+    }
+    .proj-mini-stat + .proj-mini-stat {
+      padding-left: 28px;
+      border-left: 1px solid rgba(255,255,255,0.08);
+    }
+    .proj-mini-num {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1;
+    }
+    .proj-mini-num em {
+      font-size: 13px;
+      font-weight: 400;
+      font-style: normal;
+      color: var(--accent);
+      margin-left: 2px;
+    }
+    .proj-mini-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 4px;
+    }
+
     .proj-title {
       font-size: 32px;
       font-weight: 700;
@@ -634,7 +674,7 @@
       .section-full { padding: 64px 24px; }
       .stats-inner { grid-template-columns: 1fr 1fr; padding: 28px 24px; gap: 20px; }
       .stat { border-right: none; padding: 0; border-bottom: 1px solid rgba(255,255,255,0.07); padding-bottom: 16px; }
-      .stat:nth-child(3), .stat:last-child { border-bottom: none; }
+      .stat:last-child { border-bottom: none; }
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
       .tech-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
       .project-featured { grid-template-columns: 1fr; padding: 32px 28px; gap: 32px; }
@@ -670,7 +710,7 @@
     </h1>
     <p class="hero-desc">
       <strong>Flutter 앱</strong>부터 <strong>FastAPI 백엔드</strong>,<br>
-      <strong>Raspberry Pi AI</strong>까지 —<br>
+      <strong>AWS 클라우드 배포</strong>까지 —<br>
       아이디어를 실제로 구현합니다.
     </p>
     <div class="hero-cta">
@@ -684,14 +724,6 @@
 <!-- Stats Strip -->
 <div class="stats-wrap">
   <div class="stats-inner">
-    <div class="stat">
-      <span class="stat-num">8<em>개월</em></span>
-      <span class="stat-label">졸업작품 개발 기간</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">3<em>인</em></span>
-      <span class="stat-label">팀 협업 (졸업작품)</span>
-    </div>
     <div class="stat">
       <span class="stat-num">3</span>
       <span class="stat-label">레이어 풀스택<br>모바일 · 백엔드 · 임베디드</span>
@@ -710,7 +742,7 @@
     <div class="about-text">
       <p>
         AI, 모바일, 백엔드를 넘나들며 직접 아이디어를 구현하는 개발자입니다.
-        졸업작품으로 <strong>AI 기반 스마트홈 디지털 액자 시스템 Persona Frame</strong>을
+        졸업작품으로 <strong>AI 기반 스마트홈 디지털 액자 시스템 Purby</strong>를
         팀과 함께 개발했고, Flutter 모바일 앱 전체를 담당했습니다.
       </p>
       <p>
@@ -780,7 +812,7 @@
 <section class="section" id="projects">
   <h2 class="section-heading">프로젝트</h2>
   <div class="proj-tabs">
-    <button class="proj-tab active" data-target="proj-persona">Persona Frame</button>
+    <button class="proj-tab active" data-target="proj-persona">Purby</button>
     <button class="proj-tab" data-target="proj-future">개인 프로젝트</button>
   </div>
 
@@ -790,9 +822,19 @@
       <div class="project-info">
         <div class="proj-meta">
           <span class="proj-badge">졸업작품</span>
-          <span class="proj-period">2026.03 – 2026.11<span></span>팀 3인</span>
+          <span class="proj-period">2026.03 – 2026.11</span>
         </div>
-        <h3 class="proj-title">Persona Frame</h3>
+        <div class="proj-mini-stats">
+          <div class="proj-mini-stat">
+            <span class="proj-mini-num">8<em>개월</em></span>
+            <span class="proj-mini-label">개발 기간</span>
+          </div>
+          <div class="proj-mini-stat">
+            <span class="proj-mini-num">3<em>인</em></span>
+            <span class="proj-mini-label">팀 구성</span>
+          </div>
+        </div>
+        <h3 class="proj-title">Purby</h3>
         <div class="proj-role">Purby · Flutter 모바일 앱 개발 담당</div>
         <p class="proj-desc">
           AI 기반 개인화 스마트홈 시스템. Flutter 모바일 앱이 FastAPI 백엔드를 통해
